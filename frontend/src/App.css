@@ -1,0 +1,14 @@
+.chat-item {
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.chat-item:hover {
+  background-color: lightgray;
+}
+
+.chat-item.active {
+  background-color: lightblue;
+}
