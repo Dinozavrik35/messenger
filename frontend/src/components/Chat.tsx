@@ -47,8 +47,11 @@ const messageForm = {
 const chatStyle = css({
     backgroundColor: 'lightcyan',
     marginLeft: 'auto',
-    width: '70%',
-    padding: '10px 20px'
+    padding: '10px 20px', 
+    flexGrow: '1',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
 })
 
 type message = {
@@ -62,11 +65,13 @@ type message = {
 const Chat: FC = () => {
     const [message, setMessage] = useState<string>("");
     const [messageList, setMessageList] = useState<message[]>([]);
+    const [isTyping, setIsTyping] = useState<boolean>(false);
     const user = localStorage.getItem('user');
     const { id } = useParams();
 
     useEffect(() => {
         socket.connect();
+        socket.emit('create', id);
 
         return () => {
             socket.disconnect();
@@ -80,6 +85,14 @@ const Chat: FC = () => {
 
         socket.on("addMessage", (messageDB) => {
             setMessageList((prev) => [...prev, messageDB]);
+        });
+        
+        socket.on("typing", () => {
+            setIsTyping(true);
+        });
+
+        socket.on("stop-typing", () => {
+            setIsTyping(false);
         });
 
         return () => {
@@ -99,7 +112,7 @@ const Chat: FC = () => {
                 res ? setMessageList(res) : setMessageList([]);
             })
             .catch((error) => console.error(error));
-    }, []);
+    }, [id]);
 
     const sendMessage = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -112,6 +125,16 @@ const Chat: FC = () => {
 
         setMessage("");
     };
+
+    const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+
+        if(e.target.value.length > 0) {
+            socket.emit("typing", id);
+        } else {
+            socket.emit("stop-typing", id);
+        }
+    }
 
     return (
         <div css={chatStyle}>
@@ -126,12 +149,15 @@ const Chat: FC = () => {
                         </div>
                     ))}
             </div>
+            { isTyping && 
+                <p>набирает сообщение...</p>
+            }
             <form css={messageForm.form}>
                 <input
                     css={messageForm.input}
                     type="text"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => handleTyping(e)}
                 />
                 <button css={messageForm.button} onClick={(e) => sendMessage(e)}>Отправить</button>
             </form>

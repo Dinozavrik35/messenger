@@ -1,10 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
+import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Page from "../layouts/Page";
 import Chat from "../components/Chat";
 import Home from "../components/Home";
-import Auth from "../components/Auth";
+import AuthPage from "../pages/AuthPage";
+import SignUpPage from "../pages/SignUpPage";
 
-let nesetedPages = [
+
+let nesetedPages: RouteObject[] = [
     // {
     //     path: "/user",
     //     element: <AuthRequired component={User} />,
@@ -23,27 +25,23 @@ let nesetedPages = [
     nesetedPages.push({ path: path, element: <Home /> })
 });
 
-// ["/teams/:teamId", "/teams/:teamId/*"].forEach((path) => {
-//     nesetedPages.push({ path: path, element: <AuthRequired component={SingleTeam} /> })
-// });
 
-// ["/boards/:boardId", "/teams/:teamId/boards/:boardId"].forEach((path) => {
-//     nesetedPages.push({ path: path, element: <AuthRequired component={SingleBoard} /> })
-// });
-
-const router = createBrowserRouter([
-    {
-        path: "/login",
-        element: <Auth />,
-    },
-    // {
-    //     path: "/signup",
-    //     element: <SignUp />,
-    // },
+let pages: RouteObject[] = [
     {
         element: <Page />,
         children: nesetedPages,
     },
-]);
+];
+
+["/login", "/auth", "/signin"].forEach((path) => {
+    pages.push({ path: path, element: <AuthPage /> })
+});
+
+["/signup", "/register"].forEach((path) => {
+    pages.push({ path: path, element: <SignUpPage /> })
+});
+
+
+const router = createBrowserRouter(pages);
 
 export default router;

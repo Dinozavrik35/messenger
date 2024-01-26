@@ -23,7 +23,9 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const user = new User({
-        name: req.body.name
+        login: req.body.login,
+        password: req.body.password, // сделать шифрование
+        email: req.body.email
     })
 
     try {
@@ -31,6 +33,16 @@ router.post('/', async (req, res) => {
         res.status(201).json(newUser);
     } catch(error) {
         res.status(400).json({ message: error.message })
+    }
+})
+
+
+router.post('/auth', async (req, res) => {
+    try {
+        const user = await User.findOne({ login: req.body.login, password: req.body.password });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message })
     }
 })
 

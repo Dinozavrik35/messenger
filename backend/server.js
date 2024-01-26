@@ -42,7 +42,6 @@ app.use("/messages", messagesRouter);
 
 io.on("connection", (socket) => {
     console.log(socket.id);
-    socket.join("room of people");
 
     socket.on("addMessage", (message) => {
         const messageDB = new Message(message);
@@ -50,9 +49,21 @@ io.on("connection", (socket) => {
         newMessage
             .then((res) => {
                 console.log(res);
-                io.to("room of people").emit("addMessage", res);
+                io.to(messageDB.chat_id).emit("addMessage", res);
             })
             .catch((error) => console.log(error));
+    });
+
+    socket.on('typing', (id) => {
+        io.to(id).emit("typing");
+    });
+
+    socket.on('stop-typing', (id) => {
+        io.to(id).emit("stop-typing");
+    });
+
+    socket.on('create', function(room) {
+        socket.join(room);
     });
 
     socket.on("disconnect", () => {
