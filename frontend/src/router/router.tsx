@@ -1,20 +1,13 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Page from "../layouts/Page";
-import Chat from "../components/Chat";
-import Home from "../components/Home";
+import Chat from "../components/chat/Chat";
+import HomePage from "../pages/HomePage";
 import AuthPage from "../pages/AuthPage";
 import SignUpPage from "../pages/SignUpPage";
+import AuthRequired from "../components/auth/AuthRequired";
 
 
 let nesetedPages: RouteObject[] = [
-    // {
-    //     path: "/user",
-    //     element: <AuthRequired component={User} />,
-    // },
-    // {
-    //     path: "/teams",
-    //     element: <AuthRequired component={Teams} />,
-    // },
     {
         path: "/chats/:id",
         element: <Chat />
@@ -22,13 +15,13 @@ let nesetedPages: RouteObject[] = [
 ];
  
 ["", "*", "/", "/home"].forEach((path) => {
-    nesetedPages.push({ path: path, element: <Home /> })
+    nesetedPages.push({ path: path, element: <HomePage /> })
 });
 
 
 let pages: RouteObject[] = [
     {
-        element: <Page />,
+        element: <AuthRequired Component={Page} />,
         children: nesetedPages,
     },
 ];

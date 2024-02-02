@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import SingUpForm from '../components/SingUpForm'
+import SingUpForm from '../components/auth/SingUpForm'
 import { NavLink } from 'react-router-dom'
 
 const SignUpPage: FC = () => {

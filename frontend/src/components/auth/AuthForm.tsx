@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { fetchData } from "../../helpers/fetchData";
+import { UserModel } from "../../models/UserModel";
 
 const AuthForm: FC = () => {
     const {
@@ -10,25 +12,18 @@ const AuthForm: FC = () => {
     } = useForm();
     const navigate = useNavigate();
 
-    const handleLogin = (loginData: FieldValues) => {
-        console.log(loginData);
-        const userLogin = fetch(`http://localhost:3000/users/auth`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                login: loginData.login,
-                password: loginData.password,
-            }),
+    const handleLogin = async (loginData: FieldValues) => {
+        const { data, error } = await fetchData<UserModel>("/users/auth", "POST", {
+            login: loginData.login,
+            password: loginData.password,
         });
-        userLogin
-            .then((res) => res.json())
-            .then((res) => {
-                localStorage.setItem("user", res._id);
-                navigate("/chats");
-            })
-            .catch((error) => console.error(error));
+
+        if(data) {
+            localStorage.setItem("user", data.login);
+            navigate("/chats");
+        } 
+
+        if(error) console.log(error);
     };
 
     return (

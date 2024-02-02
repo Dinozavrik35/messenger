@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const messageSchema = new mongoose.Schema({
-    user_id: {
+const messageSchema = new Schema({
+    userId: {
         type: String,
         required: true
     },
-    chat_id: {
+    chatId: {
         type: String,
         required: true
     },
@@ -13,11 +13,11 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    created_at: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now
     }
 })
 
-module.exports = mongoose.model('message', messageSchema);
+export default model('message', messageSchema);

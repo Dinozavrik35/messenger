@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     login: {
         type: String,
         required: true,
@@ -21,11 +21,11 @@ const userSchema = new mongoose.Schema({
             message: (props) => `${props.value} is not a valid email!`,
         },
     },
-    creationDate: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now,
     },
 });
 
-module.exports = mongoose.model("user", userSchema);
+export default model("user", userSchema);

@@ -2,6 +2,8 @@ import { FC } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { css } from "@emotion/react";
+import { fetchData } from "../../helpers/fetchData";
+import { UserModel } from "../../models/UserModel";
 
 const signInFormStyle = css({
     display: "flex",
@@ -35,31 +37,21 @@ const SingUpForm: FC = () => {
 
     const navigate = useNavigate();
 
-    const handleSignUp = (newUser: FieldValues) => {
-        console.log(newUser);
-
+    const handleSignUp = async (newUser: FieldValues) => {
         if (newUser.password !== newUser.repeat) return;
-
-        const addUser = fetch("http://localhost:3000/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                login: newUser.login,
-                password: newUser.password,
-                email: newUser.email,
-            }),
+        
+        const { data, error } = await fetchData<UserModel>("/users", "POST", {
+            login: newUser.login,
+            password: newUser.password,
+            email: newUser.email,
         });
 
-        addUser
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res);
-                localStorage.setItem("user", res._id);
-                navigate("/home");
-            })
-            .catch((error) => console.error(error));
+        if(data) {
+            localStorage.setItem("user", data.login);
+            navigate("/home");
+        } 
+
+        if(error) console.log(error);
     };
 
     return (
