@@ -1,7 +1,7 @@
 import express from "express";
-import userRouter from "../routes/userRoute.js";
-import chatRouter from "../routes/chatRoute.js";
-import messageRouter from "../routes/messageRoute.js";
+import userRouter from "../routes/userRoute";
+import chatRouter from "../routes/chatRoute";
+import messageRouter from "../routes/messageRoute";
 
 const router = express.Router();
 

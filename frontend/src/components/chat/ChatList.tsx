@@ -102,7 +102,6 @@ const ChatList: FC = () => {
         });
 
         socket.on("connection-removed", (data: string) => {
-            console.log(data);
             setOnlineUsers(
                 new Set([
                     ...Array.from(onlineUsers).filter((item) => item !== data),

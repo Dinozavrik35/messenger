@@ -4,7 +4,7 @@ import {
     getChatListByUserId,
     getChatListByUserLogin,
     addChat,
-} from "../controllers/chatController.js";
+} from "../controllers/chatController";
 
 
 const router = Router();

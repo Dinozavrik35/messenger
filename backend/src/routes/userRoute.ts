@@ -5,7 +5,7 @@ import {
     getUserListBySearchQuery,
     addUser,
     authUser,
-} from "../controllers/userController.js";
+} from "../controllers/userController";
 
 
 const router = Router();

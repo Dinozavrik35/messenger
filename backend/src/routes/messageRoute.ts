@@ -3,7 +3,7 @@ import {
     getMessageList,
     getMessageListByChatId,
     addMessage,
-} from "../controllers/messageController.js";
+} from "../controllers/messageController";
 
 
 const router = Router();

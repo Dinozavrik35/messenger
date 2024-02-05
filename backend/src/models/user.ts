@@ -1,6 +1,13 @@
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema({
+interface IUser {
+    login: string;
+    password: string;
+    email: string;
+    createdAt: Date;
+}
+
+const userSchema = new Schema<IUser>({
     login: {
         type: String,
         required: true,
@@ -15,7 +22,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         validate: {
-            validator: function (v) {
+            validator: function (v: string) {
                 return /^\S+@\S+\.\S+$/.test(v);
             },
             message: (props) => `${props.value} is not a valid email!`,
